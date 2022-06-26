@@ -44,7 +44,7 @@ public static class IDiscordRestAPIExtensions
         return interactions.CreateInteractionResponseAsync(interactionID, interactionToken, response, ct: ct);
     }
     
-    public static Task<Result<IMessage>> CreateFollowupMessageAsync(this IDiscordRestInteractionAPI interactions, Snowflake applicationID, string interactionToken, IView view, CancellationToken ct = default)
+    public static Task<Result<IMessage>> CreateFollowupMessageAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, IView view, CancellationToken ct = default)
     {
         var viewResult = ViewHelper.Render(view);
 
@@ -55,6 +55,6 @@ public static class IDiscordRestAPIExtensions
         
         var renderedView = viewResult.Entity;
         
-        return interactions.CreateFollowupMessageAsync(applicationID, interactionToken, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
+        return interactions.CreateFollowupMessageAsync(interactionID, interactionToken, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
     }
 }

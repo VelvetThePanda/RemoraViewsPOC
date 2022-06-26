@@ -65,7 +65,7 @@ internal static class ViewHelper
         if (orderedComponents.Count() > 5)
             return Result.FromError(new TooManyComponentsError());
 
-            foreach (var componentList in orderedComponents)
+        foreach (var componentList in orderedComponents)
         {
             row++;
             column = 0;
