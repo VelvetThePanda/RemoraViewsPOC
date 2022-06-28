@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Remora.Discord.API.Abstractions.Objects;
 using Remora.Discord.API.Objects;
@@ -39,7 +40,7 @@ internal static class ViewHelper
         
         if (!validationResult.IsSuccess)
             return Result<RenderedView>.FromError(validationResult.Error);
-        
+
         var contentValue = contentProperty?.GetValue(view) as string ?? string.Empty;
 
         var embedsValue = embeds.Select(prop => (IEmbed?)prop.GetValue(view))
@@ -55,14 +56,14 @@ internal static class ViewHelper
                                                .Select(components => new ActionRowComponent(components))
                                                .ToArray();
         
-        var returnContent    = string.IsNullOrEmpty(contentValue) ? default(Optional<string>) : contentValue;
-        var returnEmbeds     = embedsValue.Length == 0 ? default(Optional<IReadOnlyList<IEmbed>>) : embedsValue;
-        var returnComponents = componentsValue.Length == 0 ? default(Optional<IReadOnlyList<IMessageComponent>>) : componentsValue;
+        var returnContent    = string.IsNullOrEmpty(contentValue) && !CanBeEmpty(contentProperty)     ? default(Optional<string>) : contentValue;
+        var returnEmbeds     = embedsValue.Length == 0            && !CanBeEmpty(embeds.ToArray())    ? default(Optional<IReadOnlyList<IEmbed>>) : embedsValue;
+        var returnComponents = componentsValue.Length == 0        && !CanBeEmpty(components.ToArray())? default(Optional<IReadOnlyList<IMessageComponent>>) : componentsValue;
 
-        
-        
         return Result<RenderedView>.FromSuccess(new RenderedView(returnContent, returnEmbeds, returnComponents));
     }
+
+    private static bool CanBeEmpty(params PropertyInfo[] properties) => properties.Any(p => p.GetCustomAttribute<AllowNullAttribute>() is not null);
     
     private static Result ValidateComponentGroupings(IEnumerable<IEnumerable<PropertyInfo>> orderedComponents)
     {
