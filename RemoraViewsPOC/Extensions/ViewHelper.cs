@@ -42,11 +42,18 @@ internal static class ViewHelper
         
         var contentValue = contentProperty?.GetValue(view) as string ?? string.Empty;
 
-        var embedsValue = embeds.Select(prop => (IEmbed)prop.GetValue(view)).ToArray();
+        var embedsValue = embeds.Select(prop => (IEmbed?)prop.GetValue(view))
+                                .Where(prop => prop is not null)
+                                .ToArray();
         
-        var componentsValue = orderedComponents.Select(props => props.Select(prop => (IMessageComponent)prop.GetValue(view)).ToArray())
-                                                  .Select(components => new ActionRowComponent(components))
-                                                  .ToArray();
+        var componentsValue = orderedComponents.Select
+                                               (
+                                                   props => props.Where(component => component is not null)
+                                                                 .Select(prop => (IMessageComponent)prop.GetValue(view))
+                                                                 .ToArray()
+                                               )
+                                               .Select(components => new ActionRowComponent(components))
+                                               .ToArray();
         
         var returnContent    = string.IsNullOrEmpty(contentValue) ? default(Optional<string>) : contentValue;
         var returnEmbeds     = embedsValue.Length == 0 ? default(Optional<IReadOnlyList<IEmbed>>) : embedsValue;
