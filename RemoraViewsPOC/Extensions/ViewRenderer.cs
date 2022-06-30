@@ -129,11 +129,11 @@ internal static class ViewRenderer
             // but perhaps that's not a bad thing, since you can mix and match any valid components here.
             var rowIndex = prop.Property.GetCustomAttribute<RowAttribute>()?.Row ?? prop.Index;
             
-            var row = ordered.GetOrAdd((int)rowIndex, new List<PropertyInfo>());
+            var row = ordered.GetOrAdd((int)rowIndex, new List<PropertyInfo>(5));
 
             if (prop.Property.GetCustomAttribute<OrderAttribute>()?.Order is { } order)
             {
-                row.Insert((int)order, prop.Property);
+                row.Insert(Math.Max(0, (int)order - 1), prop.Property);
             }
             else
             {
