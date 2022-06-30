@@ -4,6 +4,13 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>VTP.Remora.Views</PackageId>
+        <PackageVersion>1.0.1-alpha</PackageVersion>
+        <Authors>VelvetThePanda</Authors>
+        <Description>A (currently POC) library to implement views (e.g. MVC) into the Remora.Discord library.</Description>
+        <PackageProjectUrl>https://github.com/VelvetThePanda/RemoraViewsPOC</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/VelvetThePanda/RemoraViewsPOC</RepositoryUrl>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>

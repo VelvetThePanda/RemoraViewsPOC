@@ -34,7 +34,7 @@ internal static class ViewRenderer
 
         embeds = OrderProperties(embeds);
 
-        var orderedComponents = OrderChunkedProperties(embeds.Select((p, i) => (p, i)));
+        var orderedComponents = OrderChunkedProperties(components.Select((p, i) => (p, i)));
         
         var validationResult = ValidateComponentGroupings(orderedComponents);
         
