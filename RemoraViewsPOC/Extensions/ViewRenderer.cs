@@ -11,7 +11,7 @@ using RemoraViewsPOC.Types;
 
 namespace RemoraViewsPOC.Extensions;
 
-internal static class ViewHelper
+internal static class ViewRenderer
 {
     /// <summary>
     /// Renders a given <see cref="IView"/>.
@@ -56,15 +56,15 @@ internal static class ViewHelper
                                                .Select(components => new ActionRowComponent(components))
                                                .ToArray();
         
-        var returnContent    = string.IsNullOrEmpty(contentValue) && !CanBeEmpty(contentProperty)     ? default(Optional<string>) : contentValue;
-        var returnEmbeds     = embedsValue.Length == 0            && !CanBeEmpty(embeds.ToArray())    ? default(Optional<IReadOnlyList<IEmbed>>) : embedsValue;
-        var returnComponents = componentsValue.Length == 0        && !CanBeEmpty(components.ToArray())? default(Optional<IReadOnlyList<IMessageComponent>>) : componentsValue;
+        var allowPollyfill = view.GetType().GetCustomAttribute<PollyFillAttribute>(true) is not null;
+        
+        var returnContent    = string.IsNullOrEmpty(contentValue) && allowPollyfill ? default(Optional<string>) : contentValue;
+        var returnEmbeds     = embedsValue.Length == 0            && allowPollyfill ? default(Optional<IReadOnlyList<IEmbed>>) : embedsValue;
+        var returnComponents = componentsValue.Length == 0        && allowPollyfill ? default(Optional<IReadOnlyList<IMessageComponent>>) : componentsValue;
 
         return Result<RenderedView>.FromSuccess(new RenderedView(returnContent, returnEmbeds, returnComponents));
     }
 
-    private static bool CanBeEmpty(params PropertyInfo[] properties) => properties.Any(p => p.GetCustomAttribute<AllowNullAttribute>() is not null);
-    
     private static Result ValidateComponentGroupings(IEnumerable<IEnumerable<PropertyInfo>> orderedComponents)
     {
         var row = 0;

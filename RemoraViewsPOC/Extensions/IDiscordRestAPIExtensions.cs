@@ -12,7 +12,7 @@ public static class IDiscordRestAPIExtensions
 {
     public static Task<Result<IMessage>> CreateMessageAsync(this IDiscordRestChannelAPI channels, Snowflake channelID, IView view, CancellationToken ct = default)
     {
-        var viewResult = ViewHelper.Render(view);
+        var viewResult = ViewRenderer.Render(view);
 
         if (!viewResult.IsSuccess)
         {
@@ -26,7 +26,7 @@ public static class IDiscordRestAPIExtensions
     
     public static Task<Result> CreateInteractionResponseAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, IView view, bool ephemeral = false, CancellationToken ct = default)
     {
-        var viewResult = ViewHelper.Render(view);
+        var viewResult = ViewRenderer.Render(view);
 
         if (!viewResult.IsSuccess)
         {
@@ -46,7 +46,7 @@ public static class IDiscordRestAPIExtensions
     
     public static Task<Result<IMessage>> CreateFollowupMessageAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, IView view, CancellationToken ct = default)
     {
-        var viewResult = ViewHelper.Render(view);
+        var viewResult = ViewRenderer.Render(view);
 
         if (!viewResult.IsSuccess)
         {
