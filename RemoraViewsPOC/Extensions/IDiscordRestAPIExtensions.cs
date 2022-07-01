@@ -24,7 +24,22 @@ public static class IDiscordRestAPIExtensions
         return channels.CreateMessageAsync(channelID, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
     }
     
-    public static Task<Result> CreateInteractionResponseAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, IView view, bool ephemeral = false, CancellationToken ct = default)
+    public static Task<Result<IMessage>> EditMessageAsync(this IDiscordRestChannelAPI channels, Snowflake channelID, Snowflake messageID, IView view, CancellationToken ct = default)
+    {
+        var viewResult = ViewRenderer.Render(view);
+
+        if (!viewResult.IsSuccess)
+        {
+            return Task.FromResult(Result<IMessage>.FromError(viewResult.Error));
+        }
+        
+        var renderedView = viewResult.Entity;
+        
+        return channels.EditMessageAsync(channelID, messageID, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
+    }
+    
+    
+    public static Task<Result> CreateInteractionResponseAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, InteractionCallbackType type, IView view, bool ephemeral = false, CancellationToken ct = default)
     {
         var viewResult = ViewRenderer.Render(view);
 
@@ -37,11 +52,25 @@ public static class IDiscordRestAPIExtensions
 
         var response = new InteractionResponse
         (
-            InteractionCallbackType.DeferredChannelMessageWithSource, 
+            type, 
             new(new InteractionMessageCallbackData(Content: renderedView.Content, Embeds: renderedView.Embeds, Components: renderedView.Components))
         );
         
         return interactions.CreateInteractionResponseAsync(interactionID, interactionToken, response, ct: ct);
+    }
+    
+    public static Task<Result<IMessage>> EditOriginalInteractionResponseAsync(this IDiscordRestInteractionAPI interactions, Snowflake applicationID, string interactionToken, IView view, CancellationToken ct = default)
+    {
+        var viewResult = ViewRenderer.Render(view);
+
+        if (!viewResult.IsSuccess)
+        {
+            return Task.FromResult(Result<IMessage>.FromError(viewResult.Error));
+        }
+        
+        var renderedView = viewResult.Entity;
+
+        return interactions.EditOriginalInteractionResponseAsync(applicationID, interactionToken, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
     }
     
     public static Task<Result<IMessage>> CreateFollowupMessageAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, IView view, CancellationToken ct = default)
@@ -56,5 +85,19 @@ public static class IDiscordRestAPIExtensions
         var renderedView = viewResult.Entity;
         
         return interactions.CreateFollowupMessageAsync(interactionID, interactionToken, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
+    }
+    
+    public static Task<Result<IMessage>> EditFollowupMessageAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, Snowflake messageID, IView view, CancellationToken ct = default)
+    {
+        var viewResult = ViewRenderer.Render(view);
+
+        if (!viewResult.IsSuccess)
+        {
+            return Task.FromResult(Result<IMessage>.FromError(viewResult.Error));
+        }
+        
+        var renderedView = viewResult.Entity;
+        
+        return interactions.EditFollowupMessageAsync(interactionID, interactionToken, messageID, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
     }
 }
