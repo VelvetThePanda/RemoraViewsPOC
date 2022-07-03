@@ -100,4 +100,36 @@ public static class IDiscordRestAPIExtensions
         
         return interactions.EditFollowupMessageAsync(interactionID, interactionToken, messageID, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
     }
+
+    public static Task<Result<IMessage>> ExecuteWebhookAsync(this IDiscordRestWebhookAPI webhooks, Snowflake webhookId,
+        string webhookToken, IView view, Optional<string> username = default, Optional<string> avatarUrl = default)
+    {
+        var viewResult = ViewRenderer.Render(view);
+
+        if (!viewResult.IsSuccess)
+        {
+            return Task.FromResult(Result<IMessage>.FromError(viewResult.Error));
+        }
+
+        var renderedView = viewResult.Entity;
+        
+        return webhooks.ExecuteWebhookAsync(webhookId, webhookToken, content: renderedView.Content,
+            embeds: renderedView.Embeds, components: renderedView.Components, username: username, avatarUrl: avatarUrl);
+    }
+    
+    public static Task<Result<IMessage>> EditWebhookMessageAsync(this IDiscordRestWebhookAPI webhooks, Snowflake webhookId,
+        string webhookToken, Snowflake messageID, IView view)
+    {
+        var viewResult = ViewRenderer.Render(view);
+
+        if (!viewResult.IsSuccess)
+        {
+            return Task.FromResult(Result<IMessage>.FromError(viewResult.Error));
+        }
+
+        var renderedView = viewResult.Entity;
+        
+        return webhooks.EditWebhookMessageAsync(webhookId, webhookToken, messageID, content: renderedView.Content,
+            embeds: renderedView.Embeds, components: renderedView.Components);
+    }
 }
