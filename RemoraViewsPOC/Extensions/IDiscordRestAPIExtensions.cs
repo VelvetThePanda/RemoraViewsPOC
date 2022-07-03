@@ -10,7 +10,13 @@ namespace RemoraViewsPOC.Extensions;
 
 public static class IDiscordRestAPIExtensions
 {
-    public static Task<Result<IMessage>> CreateMessageAsync(this IDiscordRestChannelAPI channels, Snowflake channelID, IView view, CancellationToken ct = default)
+    public static Task<Result<IMessage>> CreateMessageAsync
+    (
+        this IDiscordRestChannelAPI channels,
+        Snowflake channelID,
+        IView view,
+        CancellationToken ct = default
+    )
     {
         var viewResult = ViewRenderer.Render(view);
 
@@ -31,7 +37,14 @@ public static class IDiscordRestAPIExtensions
         );
     }
     
-    public static Task<Result<IMessage>> EditMessageAsync(this IDiscordRestChannelAPI channels, Snowflake channelID, Snowflake messageID, IView view, CancellationToken ct = default)
+    public static Task<Result<IMessage>> EditMessageAsync
+    (
+        this IDiscordRestChannelAPI channels,
+        Snowflake channelID,
+        Snowflake messageID,
+        IView view,
+        CancellationToken ct = default
+    )
     {
         var viewResult = ViewRenderer.Render(view);
 
@@ -46,7 +59,16 @@ public static class IDiscordRestAPIExtensions
     }
     
     
-    public static Task<Result> CreateInteractionResponseAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, InteractionCallbackType type, IView view, bool ephemeral = false, CancellationToken ct = default)
+    public static Task<Result> CreateInteractionResponseAsync
+    (
+        this IDiscordRestInteractionAPI interactions,
+        Snowflake interactionID,
+        string interactionToken,
+        InteractionCallbackType type,
+        IView view,
+        bool ephemeral = false,
+        CancellationToken ct = default
+    )
     {
         var viewResult = ViewRenderer.Render(view);
 
@@ -66,7 +88,14 @@ public static class IDiscordRestAPIExtensions
         return interactions.CreateInteractionResponseAsync(interactionID, interactionToken, response, ct: ct);
     }
     
-    public static Task<Result<IMessage>> EditOriginalInteractionResponseAsync(this IDiscordRestInteractionAPI interactions, Snowflake applicationID, string interactionToken, IView view, CancellationToken ct = default)
+    public static Task<Result<IMessage>> EditOriginalInteractionResponseAsync
+    (
+        this IDiscordRestInteractionAPI interactions,
+        Snowflake applicationID,
+        string interactionToken,
+        IView view,
+        CancellationToken ct = default
+    )
     {
         var viewResult = ViewRenderer.Render(view);
 
@@ -110,7 +139,15 @@ public static class IDiscordRestAPIExtensions
         );
     }
     
-    public static Task<Result<IMessage>> EditFollowupMessageAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, Snowflake messageID, IView view, CancellationToken ct = default)
+    public static Task<Result<IMessage>> EditFollowupMessageAsync
+    (
+        this IDiscordRestInteractionAPI interactions,
+        Snowflake interactionID,
+        string interactionToken,
+        Snowflake messageID,
+        IView view,
+        CancellationToken ct = default
+    )
     {
         var viewResult = ViewRenderer.Render(view);
 
@@ -133,7 +170,16 @@ public static class IDiscordRestAPIExtensions
         );
     }
 
-    public static Task<Result<IMessage>> ExecuteWebhookAsync(this IDiscordRestWebhookAPI webhooks, Snowflake webhookID, string webhookToken, IView view, Optional<string> username = default, Optional<string> avatarUrl = default)
+    public static Task<Result<IMessage>> ExecuteWebhookAsync
+    (
+        this IDiscordRestWebhookAPI webhooks,
+        Snowflake webhookID, 
+        string webhookToken,
+        IView view,
+        Optional<string> username = default,
+        Optional<string> avatarUrl = default, 
+        CancellationToken ct = default
+    )
     {
         var viewResult = ViewRenderer.Render(view);
 
@@ -152,11 +198,19 @@ public static class IDiscordRestAPIExtensions
             embeds: renderedView.Embeds,
             components: renderedView.Components, 
             username: username,
-            avatarUrl: avatarUrl
+            avatarUrl: avatarUrl,
+            ct: ct
         );
     }
     
-    public static Task<Result<IMessage>> EditWebhookMessageAsync(this IDiscordRestWebhookAPI webhooks, Snowflake webhookId, string webhookToken, Snowflake messageID, IView view)
+    public static Task<Result<IMessage>> EditWebhookMessageAsync
+    (
+        this IDiscordRestWebhookAPI webhooks,
+        Snowflake webhookId,
+        string webhookToken,
+        Snowflake messageID,
+        IView view
+    )
     {
         var viewResult = ViewRenderer.Render(view);
 
