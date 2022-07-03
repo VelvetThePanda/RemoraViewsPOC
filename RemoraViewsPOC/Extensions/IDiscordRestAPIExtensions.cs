@@ -21,7 +21,14 @@ public static class IDiscordRestAPIExtensions
         
         var renderedView = viewResult.Entity;
         
-        return channels.CreateMessageAsync(channelID, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
+        return channels.CreateMessageAsync
+        (
+            channelID,
+            renderedView.Content, 
+            embeds: renderedView.Embeds,
+            components: renderedView.Components,
+            ct: ct
+        );
     }
     
     public static Task<Result<IMessage>> EditMessageAsync(this IDiscordRestChannelAPI channels, Snowflake channelID, Snowflake messageID, IView view, CancellationToken ct = default)
@@ -70,7 +77,15 @@ public static class IDiscordRestAPIExtensions
         
         var renderedView = viewResult.Entity;
 
-        return interactions.EditOriginalInteractionResponseAsync(applicationID, interactionToken, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
+        return interactions.EditOriginalInteractionResponseAsync
+        (
+            applicationID, 
+            interactionToken,
+            renderedView.Content,
+            embeds: renderedView.Embeds, 
+            components: renderedView.Components,
+            ct: ct
+        );
     }
     
     public static Task<Result<IMessage>> CreateFollowupMessageAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, IView view, CancellationToken ct = default)
@@ -84,7 +99,15 @@ public static class IDiscordRestAPIExtensions
         
         var renderedView = viewResult.Entity;
         
-        return interactions.CreateFollowupMessageAsync(interactionID, interactionToken, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
+        return interactions.CreateFollowupMessageAsync
+        (
+            interactionID,
+            interactionToken,
+            renderedView.Content,
+            embeds: renderedView.Embeds,
+            components: renderedView.Components,
+            ct: ct
+        );
     }
     
     public static Task<Result<IMessage>> EditFollowupMessageAsync(this IDiscordRestInteractionAPI interactions, Snowflake interactionID, string interactionToken, Snowflake messageID, IView view, CancellationToken ct = default)
@@ -98,10 +121,19 @@ public static class IDiscordRestAPIExtensions
         
         var renderedView = viewResult.Entity;
         
-        return interactions.EditFollowupMessageAsync(interactionID, interactionToken, messageID, renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, ct: ct);
+        return interactions.EditFollowupMessageAsync
+        (
+            interactionID, 
+            interactionToken,
+            messageID,
+            renderedView.Content,
+            embeds: renderedView.Embeds,
+            components: renderedView.Components,
+            ct: ct
+        );
     }
 
-    public static Task<Result<IMessage>> ExecuteWebhookAsync(this IDiscordRestWebhookAPI webhooks, Snowflake webhookId, string webhookToken, IView view, Optional<string> username = default, Optional<string> avatarUrl = default)
+    public static Task<Result<IMessage>> ExecuteWebhookAsync(this IDiscordRestWebhookAPI webhooks, Snowflake webhookID, string webhookToken, IView view, Optional<string> username = default, Optional<string> avatarUrl = default)
     {
         var viewResult = ViewRenderer.Render(view);
 
@@ -112,7 +144,16 @@ public static class IDiscordRestAPIExtensions
 
         var renderedView = viewResult.Entity;
         
-        return webhooks.ExecuteWebhookAsync(webhookId, webhookToken, content: renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components, username: username, avatarUrl: avatarUrl);
+        return webhooks.ExecuteWebhookAsync
+        (
+            webhookID,
+            webhookToken,
+            content: renderedView.Content,
+            embeds: renderedView.Embeds,
+            components: renderedView.Components, 
+            username: username,
+            avatarUrl: avatarUrl
+        );
     }
     
     public static Task<Result<IMessage>> EditWebhookMessageAsync(this IDiscordRestWebhookAPI webhooks, Snowflake webhookId, string webhookToken, Snowflake messageID, IView view)
@@ -126,6 +167,14 @@ public static class IDiscordRestAPIExtensions
 
         var renderedView = viewResult.Entity;
         
-        return webhooks.EditWebhookMessageAsync(webhookId, webhookToken, messageID, content: renderedView.Content, embeds: renderedView.Embeds, components: renderedView.Components);
+        return webhooks.EditWebhookMessageAsync
+        (
+            webhookId, 
+            webhookToken,
+            messageID,
+            content: renderedView.Content,
+            embeds: renderedView.Embeds,
+            components: renderedView.Components
+        );
     }
 }
